@@ -1,0 +1,56 @@
+selfSim [(d,p)] 
+  -> {unfold selfSim}
+      Cluster (0,0) ( map mkCluster [(d,p)] )
+  -> {unfold map}
+      Cluster (0,0) (mkCluster (d,p) : map mkCluster [])
+  -> {unfold map}
+      Cluster (0,0) (mkCluster (d,p) : [])
+  -> {unfold : [] }
+      Cluster (0,0) [ mkCluster (d,p) ]
+  -> {unfold mkCluster (d,p)
+      Cluster (0,0) [Cluster (d,p) ( map (mkCluster . addMult (d,p)) [(d,p)] ) ]
+  -> {unfold map}
+      Cluster (0,0) [Cluster (d,p) ( (mkCluster . addMult (d,p)) (d,p) : map (mkCluster . addMult (d,p)) [] ) ]
+  -> {unfold map}
+      Cluster (0,0) [Cluster (d,p) ( (mkCluster . addMult (d,p)) (d,p) : [] ) ]
+  -> {unfold : []}
+      Cluster (0,0) [Cluster (d,p) [(mkCluster . addMult (d,p)) (d,p)] ]
+  -> {unfold addMult}
+      Cluster (0,0) [Cluster (d,p) [(mkCluster . (\(d1,p1) -> (d*d1,p+p1))) (d,p)] ]
+  -> {unfold . unfold \}
+      Cluster (0,0) [Cluster (d,p) [(mkCluster (d*d1,p+p1))] ]
+  -> {unfold mkCluster}
+      Cluster (0,0) [Cluster (d,p) [Cluster (d*d1,p+p1) (map (mkCluster . addMult (d*d1,p1)) pat)]]
+
+map (grabDeepNote (n-1)) c
+  -> {unfold map}
+       (grabDeepNote (n-1) c0 : grabDeepNote (n-1) c1 : map (grabDeepNote (n-1)) [] )
+  -> {unfold map}
+       (grabDeepNote (n-1) c0 : grabDeepNote (n-1) c1 : [] )
+  -> {unfold grabDeepNote}
+       (map (grabDeepNote (n-2) c0s) : map (grabDeepNote (n-2)) c1s : [] )
+  -> {unfold : []}
+       [map (grabDeepNote (n-2) c0s) : map (grabDeepNote (n-2)) c1s]
+  -> {unfold map}
+       [map (grabDeepNote (n-2) c0s) : map (grabDeepNote (n-2)) c1s]
+     
+       
+f xs = g xs
+g    = \g -> map g xs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
